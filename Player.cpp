@@ -54,8 +54,8 @@ void Player::Initialize()
 	hWalkModel_ = Model::Load("Walking_furafura.fbx");
 	Model::SetAnimFrame(hWalkModel_, 0, 91, 1.0);
 
-	hIdleModel_ = Model::Load("Idle.fbx");
-	Model::SetAnimFrame(hIdleModel_, 0, 500, 1.0);
+	hIdleModel_ = Model::Load("Zombie Idle.fbx");
+	Model::SetAnimFrame(hIdleModel_, 0, 240, 1.0);
 
 	hFlipModel_ = Model::Load("Backflip.fbx");
 	Model::SetAnimFrame(hFlipModel_, 0, 129, 1.0);
