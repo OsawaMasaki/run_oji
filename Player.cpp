@@ -81,7 +81,7 @@ void Player::Update()
 	pstate = PLAYER_STATE::PLAYER_IDLE;
 	PLAYER_DIRECTION oldDir = pdirection;
 
-	if (Input::IsKey(DIK_UP))
+	if (Input::IsKey(DIK_UP) || Input::IsKey(DIK_W))
 	{
 		//angle = 180.0f;
 		//move = XMVectorSet(0, 0, 1, 0);
@@ -89,7 +89,7 @@ void Player::Update()
 		pdirection = PLAYER_DIRECTION::PLAYER_UP;
 		pstate = PLAYER_STATE::PLAYER_WALK;
 	}
-	if (Input::IsKey(DIK_DOWN))
+	if (Input::IsKey(DIK_DOWN) || Input::IsKey(DIK_S))
 	{
 		//angle = 0.0f;
 		//move = XMVectorSet(0, 0, -1, 0);
@@ -97,7 +97,7 @@ void Player::Update()
 		pdirection = PLAYER_DIRECTION::PLAYER_DOWN;
 		pstate = PLAYER_STATE::PLAYER_WALK;
 	}
-	if (Input::IsKey(DIK_LEFT))
+	if (Input::IsKey(DIK_LEFT) || Input::IsKey(DIK_A))
 	{
 		//angle = 90.0f;
 		//move = XMVectorSet(-1, 0, 0, 0);
@@ -105,7 +105,7 @@ void Player::Update()
 		pdirection = PLAYER_DIRECTION::PLAYER_LEFT;
 		pstate = PLAYER_STATE::PLAYER_WALK;
 	}
-	if (Input::IsKey(DIK_RIGHT))
+	if (Input::IsKey(DIK_RIGHT) || Input::IsKey(DIK_D))
 	{
 		//angle = -90.0f;
 		//move = XMVectorSet(1, 0, 0, 0);
