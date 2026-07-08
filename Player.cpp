@@ -98,14 +98,13 @@ void Player::Update()
 		pstate = PLAYER_STATE::PLAYER_IDLE;
 	}//回転中でなければ状態を待機にする
 
-	pstate = PLAYER_STATE::PLAYER_IDLE;
 	PLAYER_DIRECTION oldDir = pdirection; // 今の向き
 
 
 
-	//上下左右の移動
 	if (pstate != PLAYER_STATE::PLAYER_TURN)
 	{
+		//上下左右の移動
 		if (Input::IsKey(DIK_UP) || Input::IsKey(DIK_W))
 		{
 			//angle = 180.0f;
@@ -165,7 +164,7 @@ void Player::Update()
 		}
 	}
 
-	/*
+	
 	//授業の録画みて書いておこう
 	//
 	if (oldDir != pdirection)
@@ -174,11 +173,23 @@ void Player::Update()
 		turnFrame = 0.0f;
 		turnStartAngle = P_ANGLE[oldDir];
 		turnEndDirection = pdirection;
-		turnEndAngle = ;
+		turnEndAngle = P_ANGLE[turnEndDirection];
 	}
-
+	if(pstate == PLAYER_STATE::PLAYER_TURN)
 	{
-
+		//回転中の処理
+		//oldDir → 今の角度
+		//pdirection → 目標角度
+		//30フレームで回転するようにする
+		turnFrame += 1.0f;
+		float t = turnFrame / TURN_FRAME;
+		if (t > 1.0f)
+		{
+			t = 1.0f;
+		}
+		angle = turnStartAngle + (turnEndAngle - turnStartAngle) * t;
+		transform_.rotate_.y = angle;
+		if(turnFrame >= TURN_FRAME)
 		{
 			pdirection = turnEndDirection;
 			transform_.rotate_.y = P_ANGLE[pdirection];
@@ -193,19 +204,12 @@ void Player::Update()
 		angle = P_ANGLE[pdirection];
 		transform_.rotate_.y = angle;
 	}
-	*/
-	//else if (pstate == PLAYER_STATE::PLAYER_TURN)
-	//{
-	//	//回転中の処理
 
-	//	//30フレームで回転するようにする
-
-	//}
-
-		pos = pos + move * SPEED;
-	XMStoreFloat3(&transform_.position_, pos);
+	pos = pos + move * SPEED;
 	//pos = XMVectorAdd(pos, SPEED * move);
+	XMStoreFloat3(&transform_.position_, pos);
 
+	//バックフリップのエモートを出したい
 	if (Input::IsKeyDown(DIK_B))
 	{
 		pstate = PLAYER_STATE::PLAYER_FLIP;
