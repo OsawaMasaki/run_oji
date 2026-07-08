@@ -11,6 +11,7 @@ namespace
 		PLAYER_IDLE,
 		PLAYER_WALK,
 		PLAYER_TURN,
+		PLAYER_TURN_NEAR, //180°を超えたとき近いほうから回るように
 		PLAYER_FLIP,
 		PLAYER_STATE_MAX //状態の数
 	};
@@ -22,15 +23,28 @@ namespace
 		PLAYER_DOWN,
 		PLAYER_LEFT,
 		PLAYER_RIGHT,
+		PLAYER_UP_RIGHT,
+		PLAYER_UP_LEFT,
+		PLAYER_DOWN_RIGHT,
+		PLAYER_DOWN_LEFT,
 		PLAYER_DIRECTION_MAX //方向の数
 	};
 	PLAYER_DIRECTION pdirection = PLAYER_DOWN;
-	float P_ANGLE[4] = { 180,0,90,-90 };
-	XMVECTOR P_MOVE[4] = { XMVectorSet(0, 0, 1, 0),
+	float P_ANGLE[8] = { 180,0,90,-90,-135,135,-45,45,};
+	XMVECTOR P_MOVE[8] = { XMVectorSet(0, 0, 1, 0),
 		                   XMVectorSet(0, 0, -1, 0),
 	                       XMVectorSet(-1, 0, 0, 0),
-	                       XMVectorSet(1, 0, 0, 0) };
-	float TURN_FRAME = 0.3f;
+	                       XMVectorSet(1, 0, 0, 0), 
+	                       XMVectorSet(1, 0, 1, 0), 
+	                       XMVectorSet(-1, 0, 1, 0), 
+		                   XMVectorSet(1, 0, -1, 0),
+		                   XMVectorSet(-1, 0, -1, 0),
+	};
+	float TURN_FRAME = 30.0f;
+
+	float turnStartAngle = 0.0f; //回転開始時の角度を管理する変数
+	float turnEndAngle = 0.0f;   //回転終了時の角度を管理する変数
+	PLAYER_DIRECTION turnEndDirection = PLAYER_DOWN;
 }
 
 
@@ -78,60 +92,115 @@ void Player::Update()
 	XMVECTOR move = XMVectorSet(0, 0, 0, 0);
 	const float SPEED = 0.015f;
 	float angle = 0.0f;
+	static float turnFrame = 0.0f; //回転中のフレーム数を管理する変数
+
+	if (pstate != PLAYER_STATE::PLAYER_TURN) {
+		pstate = PLAYER_STATE::PLAYER_IDLE;
+	}//回転中でなければ状態を待機にする
+
 	pstate = PLAYER_STATE::PLAYER_IDLE;
-	PLAYER_DIRECTION oldDir = pdirection;
+	PLAYER_DIRECTION oldDir = pdirection; // 今の向き
 
-	if (Input::IsKey(DIK_UP) || Input::IsKey(DIK_W))
-	{
-		//angle = 180.0f;
-		//move = XMVectorSet(0, 0, 1, 0);
 
-		pdirection = PLAYER_DIRECTION::PLAYER_UP;
-		pstate = PLAYER_STATE::PLAYER_WALK;
-	}
-	if (Input::IsKey(DIK_DOWN) || Input::IsKey(DIK_S))
+
+	//上下左右の移動
+	if (pstate != PLAYER_STATE::PLAYER_TURN)
 	{
-		//angle = 0.0f;
-		//move = XMVectorSet(0, 0, -1, 0);
-		
-		pdirection = PLAYER_DIRECTION::PLAYER_DOWN;
-		pstate = PLAYER_STATE::PLAYER_WALK;
-	}
-	if (Input::IsKey(DIK_LEFT) || Input::IsKey(DIK_A))
-	{
-		//angle = 90.0f;
-		//move = XMVectorSet(-1, 0, 0, 0);
-		
-		pdirection = PLAYER_DIRECTION::PLAYER_LEFT;
-		pstate = PLAYER_STATE::PLAYER_WALK;
-	}
-	if (Input::IsKey(DIK_RIGHT) || Input::IsKey(DIK_D))
-	{
-		//angle = -90.0f;
-		//move = XMVectorSet(1, 0, 0, 0);
-		
-		pdirection = PLAYER_DIRECTION::PLAYER_RIGHT;
-		pstate = PLAYER_STATE::PLAYER_WALK;
+		if (Input::IsKey(DIK_UP) || Input::IsKey(DIK_W))
+		{
+			//angle = 180.0f;
+			//move = XMVectorSet(0, 0, 1, 0);
+
+			pdirection = PLAYER_DIRECTION::PLAYER_UP;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		if (Input::IsKey(DIK_DOWN) || Input::IsKey(DIK_S))
+		{
+			//angle = 0.0f;
+			//move = XMVectorSet(0, 0, -1, 0);
+
+			pdirection = PLAYER_DIRECTION::PLAYER_DOWN;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		if (Input::IsKey(DIK_LEFT) || Input::IsKey(DIK_A))
+		{
+			//angle = 90.0f;
+			//move = XMVectorSet(-1, 0, 0, 0);
+
+			pdirection = PLAYER_DIRECTION::PLAYER_LEFT;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		if (Input::IsKey(DIK_RIGHT) || Input::IsKey(DIK_D))
+		{
+			//angle = -90.0f;
+			//move = XMVectorSet(1, 0, 0, 0);
+
+			pdirection = PLAYER_DIRECTION::PLAYER_RIGHT;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		//斜め移動
+		if (Input::IsKey(DIK_UP) && Input::IsKey(DIK_RIGHT) ||
+			Input::IsKey(DIK_W) && Input::IsKey(DIK_D))
+		{
+			pdirection = PLAYER_DIRECTION::PLAYER_UP_RIGHT;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		if (Input::IsKey(DIK_UP) && Input::IsKey(DIK_LEFT) ||
+			Input::IsKey(DIK_W) && Input::IsKey(DIK_A))
+		{
+			pdirection = PLAYER_DIRECTION::PLAYER_UP_LEFT;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		if (Input::IsKey(DIK_DOWN) && Input::IsKey(DIK_RIGHT) ||
+			Input::IsKey(DIK_S) && Input::IsKey(DIK_D))
+		{
+			pdirection = PLAYER_DIRECTION::PLAYER_DOWN_RIGHT;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		if (Input::IsKey(DIK_DOWN) && Input::IsKey(DIK_LEFT) ||
+			Input::IsKey(DIK_S) && Input::IsKey(DIK_A))
+		{
+			pdirection = PLAYER_DIRECTION::PLAYER_DOWN_LEFT;
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
 	}
 
+	/*
+	//授業の録画みて書いておこう
+	//
 	if (oldDir != pdirection)
 	{
 		pstate = PLAYER_STATE::PLAYER_TURN;
+		turnFrame = 0.0f;
+		turnStartAngle = P_ANGLE[oldDir];
+		turnEndDirection = pdirection;
+		turnEndAngle = ;
 	}
 
-	if (pstate != PLAYER_STATE::PLAYER_IDLE)
+	{
+
+		{
+			pdirection = turnEndDirection;
+			transform_.rotate_.y = P_ANGLE[pdirection];
+			pstate = PLAYER_STATE::PLAYER_WALK;
+		}
+		return;
+	}
+	else if (pstate != PLAYER_STATE::PLAYER_IDLE)
 	{
 		move = P_MOVE[pdirection];
+		move = XMVector3Normalize(move); // 正規化をする（1に直す）、これをしないと斜め移動したときにスピードが早くなる
 		angle = P_ANGLE[pdirection];
 		transform_.rotate_.y = angle;
 	}
-	else if (pstate == PLAYER_STATE::PLAYER_TURN)
-	{
-		//回転中の処理
+	*/
+	//else if (pstate == PLAYER_STATE::PLAYER_TURN)
+	//{
+	//	//回転中の処理
 
-		//30フレームで回転するようにする
+	//	//30フレームで回転するようにする
 
-	}
+	//}
 
 		pos = pos + move * SPEED;
 	XMStoreFloat3(&transform_.position_, pos);
@@ -152,7 +221,7 @@ void Player::Draw()
 		Model::SetTransform(hIdleModel_, transform_);
 		Model::Draw(hIdleModel_);
 	}
-	else if (pstate == PLAYER_STATE::PLAYER_WALK)
+	else if (pstate == PLAYER_STATE::PLAYER_WALK || pstate == PLAYER_STATE::PLAYER_TURN || pstate == PLAYER_STATE::PLAYER_TURN_NEAR)
 	{
 		Model::SetTransform(hWalkModel_, transform_);
 		Model::Draw(hWalkModel_);
