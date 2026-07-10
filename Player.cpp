@@ -40,6 +40,7 @@ namespace
 		                   XMVectorSet(1, 0, -1, 0),
 		                   XMVectorSet(-1, 0, -1, 0),
 	};
+
 	float TURN_FRAME = 30.0f;
 
 	float turnStartAngle = 0.0f; //回転開始時の角度を管理する変数
@@ -93,6 +94,17 @@ void Player::Update()
 	const float SPEED = 0.015f;
 	float angle = 0.0f;
 	static float turnFrame = 0.0f; //回転中のフレーム数を管理する変数
+	
+	//バックフリップのエモートを出したい
+	//if (Input::IsKeyDown(DIK_B))
+	//{
+	//	pstate = PLAYER_STATE::PLAYER_FLIP;
+	//	return;
+	//}
+	//if (pstate == PLAYER_STATE::PLAYER_FLIP) 
+	//{
+	//	if (Model::GetAnimFrame(hFlipModel_) >= 129) { pstate = PLAYER_STATE::PLAYER_IDLE; }
+	//}
 
 	if (pstate != PLAYER_STATE::PLAYER_TURN) {
 		pstate = PLAYER_STATE::PLAYER_IDLE;
@@ -165,7 +177,6 @@ void Player::Update()
 	}
 
 	
-	//授業の録画みて書いておこう
 	//
 	if (oldDir != pdirection)
 	{
@@ -175,6 +186,21 @@ void Player::Update()
 		turnEndDirection = pdirection;
 		turnEndAngle = P_ANGLE[turnEndDirection];
 	}
+
+	//---------回転方向を最短にする為のところ--------------
+	float diffAngle = turnEndAngle - turnStartAngle;
+
+	// 180度を超えて大回りしている場合は補正
+	if (diffAngle > 180.0f)
+	{
+		turnEndAngle -= 360.0f;
+	}
+	else if (diffAngle < -180.0f)
+	{
+		turnEndAngle += 360.0f;
+	}
+	//------------------------------------------------------
+
 	if(pstate == PLAYER_STATE::PLAYER_TURN)
 	{
 		//回転中の処理
@@ -209,11 +235,6 @@ void Player::Update()
 	//pos = XMVectorAdd(pos, SPEED * move);
 	XMStoreFloat3(&transform_.position_, pos);
 
-	//バックフリップのエモートを出したい
-	if (Input::IsKeyDown(DIK_B))
-	{
-		pstate = PLAYER_STATE::PLAYER_FLIP;
-	}
 }
 
 void Player::Draw()
