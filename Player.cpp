@@ -31,21 +31,24 @@ namespace
 	};
 	PLAYER_DIRECTION pdirection = PLAYER_DOWN;
 	float P_ANGLE[8] = { 180,0,90,-90,-135,135,-45,45,};
-	XMVECTOR P_MOVE[8] = { XMVectorSet(0, 0, 1, 0),
-		                   XMVectorSet(0, 0, -1, 0),
-	                       XMVectorSet(-1, 0, 0, 0),
-	                       XMVectorSet(1, 0, 0, 0), 
-	                       XMVectorSet(1, 0, 1, 0), 
-	                       XMVectorSet(-1, 0, 1, 0), 
-		                   XMVectorSet(1, 0, -1, 0),
-		                   XMVectorSet(-1, 0, -1, 0),
+	XMVECTOR P_MOVE[8] = { 
+		XMVectorSet(0, 0, 1, 0),
+		XMVectorSet(0, 0, -1, 0),
+	    XMVectorSet(-1, 0, 0, 0),
+	    XMVectorSet(1, 0, 0, 0), 
+	    XMVectorSet(1, 0, 1, 0), 
+	    XMVectorSet(-1, 0, 1, 0), 
+		XMVectorSet(1, 0, -1, 0),
+		XMVectorSet(-1, 0, -1, 0),
 	};
 
-	float TURN_FRAME = 30.0f;
+	float TURN_FRAME = 10.0f;
 
 	float turnStartAngle = 0.0f; //回転開始時の角度を管理する変数
 	float turnEndAngle = 0.0f;   //回転終了時の角度を管理する変数
 	PLAYER_DIRECTION turnEndDirection = PLAYER_DOWN;
+
+	std::vector<std::vector<int>>gmap;
 }
 
 
@@ -75,6 +78,15 @@ void Player::Initialize()
 	hFlipModel_ = Model::Load("Backflip.fbx");
 	Model::SetAnimFrame(hFlipModel_, 0, 129, 1.0);
 
+	if (ground_ != nullptr)
+	{
+		gmap = ground_->GetMapData();
+	}
+	else
+	{
+		Debug::Log("Ground is not set for Player.");
+	}
+
 }
 
 void Player::Update()
@@ -91,7 +103,7 @@ void Player::Update()
 
 	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
 	XMVECTOR move = XMVectorSet(0, 0, 0, 0);
-	const float SPEED = 0.015f;
+	const float SPEED = 0.1f;
 	float angle = 0.0f;
 	static float turnFrame = 0.0f; //回転中のフレーム数を管理する変数
 	
@@ -234,6 +246,9 @@ void Player::Update()
 	pos = pos + move * SPEED;
 	//pos = XMVectorAdd(pos, SPEED * move);
 	XMStoreFloat3(&transform_.position_, pos);
+
+	//壁オブジェクトに食い込んでいたら戻す！
+	//ground_->GetMapData();
 
 }
 

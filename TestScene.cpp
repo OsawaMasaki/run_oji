@@ -13,10 +13,15 @@ TestScene::TestScene(GameObject * parent)
 void TestScene::Initialize()
 {	
 	//pWp = Instantiate<Weapon>(this);
-	Instantiate <Player>(this);
-	Instantiate <Ground>(this);
+	//Instantiate <Player>(this);
+	//Instantiate <Ground>(this);
 
-	Camera::SetPosition(XMFLOAT3(0.0f, 6.0f, -15.0f));
+	Player* pPlayer = Instantiate<Player>(this);
+	Ground* pGround = Instantiate<Ground>(this);
+
+	pPlayer->SetGround(pGround);
+
+	Camera::SetPosition(XMFLOAT3(0.0f, 20.0f, -30.0f));
 }
 
 //çXêV
