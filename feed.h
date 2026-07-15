@@ -4,13 +4,13 @@
 
 //class Ground; // 前方宣言
 
-class Enemy :
+class Feed :
 	public GameObject
 {
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	Enemy(GameObject* parent);
+	Feed(GameObject* parent);
 
 	//初期化
 	void Initialize() override;
@@ -25,8 +25,9 @@ public:
 	void Release() override;
 
 private:
+	std::vector<std::vector<int>> feedData_;
 	int hModel_;//
-
-	//Ground* ground_;//地面オブジェクトのポインタ
+	int mapWidth_;
+	int mapHeight_;
 };
 
