@@ -2,31 +2,48 @@
 #include "Engine/Model.h"
 #include "Engine/Debug.h"
 #include "TestScene.h"
+#include "Engine/CsvReader.h"
+
 
 
 namespace
 {
-	using std::vector;
-	//メンバ化して呼んでこれるようにする
-	vector<vector<int>> mapData =
-	{
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,0,1,0,0,0,0,0,1,1},
-		{1,0,1,0,1,0,1,0,0,1},
-		{1,0,1,1,1,0,1,1,0,1},
-		{1,0,0,0,0,0,1,0,0,1},
-		{1,0,1,1,1,1,1,0,1,1},
-		{1,0,1,0,0,0,0,0,0,1},
-		{1,0,1,1,1,0,1,1,1,1},
-		{1,1,0,0,0,0,0,0,0,1},
-		{1,1,1,1,1,1,1,1,1,1},
-	};
+	//using std::vector;
+	////メンバ化して呼んでこれるようにする
+	//vector<vector<int>> mapData =
+	//{
+	//	{1,1,1,1,1,1,1,1,1,1},
+	//	{1,0,1,0,0,0,0,0,1,1},
+	//	{1,0,1,0,1,0,1,0,0,1},
+	//	{1,0,1,1,1,0,1,1,0,1},
+	//	{1,0,0,0,0,0,1,0,0,1},
+	//	{1,0,1,1,1,1,1,0,1,1},
+	//	{1,0,1,0,0,0,0,0,0,1},
+	//	{1,0,1,1,1,0,1,1,1,1},
+	//	{1,1,0,0,0,0,0,0,0,1},
+	//	{1,1,1,1,1,1,1,1,1,1},
+	//};
 }
 
 Ground::Ground(GameObject* parent)
-	:GameObject(parent), hSilly(-1), hTree(-1)
+	:GameObject(parent), hSilly(-1), hTree(-1),mapWidth_(-1),mapHeight_(-1)
 {
-	mapData_ = mapData;//ファイルグローバルのmapDataをコピーして
+	CsvReader csvData;
+	csvData.Load("map.csv");
+	mapWidth_ = csvData.GetWidth();
+	mapHeight_ = csvData.GetHeight();
+
+	mapData_ = std::vector<std::vector<int>>(mapHeight_, std::vector<int>(mapWidth_, 0));
+	for (int x = 0;x < mapWidth_;x++)
+	{
+		for (int y = 0; y < mapHeight_;y++)
+		{
+			mapData_[y][x] = csvData.GetValue(x, y);
+		}
+	}
+
+
+	//mapData_ = mapData;//ファイルグローバルのmapDataをコピーして
 }
 
 void Ground::Initialize()

@@ -1,19 +1,19 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include <vector>
+#include "ground.h"
 
+//class Ground; // 前方宣言
 
-class Ground :
+class Enemy :
 	public GameObject
 {
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	Ground(GameObject* parent);
+	Enemy(GameObject* parent);
 
 	//初期化
 	void Initialize() override;
-	std::vector<std::vector<int>>GetMapData() { return mapData_; }
 
 	//更新
 	void Update() override;
@@ -25,10 +25,10 @@ public:
 	void Release() override;
 
 private:
-	std::vector<std::vector<int>> mapData_;
-	int hSilly;
-	int hTree;
-	int mapWidth_;
-	int mapHeight_;
+	int hModel_;//
+	//int hWalkModel_;//歩き
+	//int hIdleModel_;//待機
+	//int hFlipModel_;//
+	//Ground* ground_;//地面オブジェクトのポインタ
 };
 
