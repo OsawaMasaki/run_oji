@@ -2,7 +2,12 @@
 #include "Engine/GameObject.h"
 #include "ground.h"
 
-//class Ground; // 前方宣言
+enum FeedType
+{
+	FEEDTYPE_NORMAL,
+	FEEDTYPE_POWER,
+	FEEDTYPE_MAX
+};
 
 class Feed :
 	public GameObject
@@ -24,10 +29,13 @@ public:
 	//開放
 	void Release() override;
 
+	void SetFeedType(FeedType type);
+	void OnCollision(GameObject* pTarget) override;
+
 private:
 	std::vector<std::vector<int>> feedData_;
+	FeedType type_;//餌のモデル
 	int hModel_;//
-	int mapWidth_;
-	int mapHeight_;
+	int score_;
 };
 

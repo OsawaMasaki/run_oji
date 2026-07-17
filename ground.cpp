@@ -3,6 +3,7 @@
 #include "Engine/Debug.h"
 #include "TestScene.h"
 #include "Engine/CsvReader.h"
+#include "feed.h"
 
 
 
@@ -40,6 +41,20 @@ Ground::Ground(GameObject* parent)
 		{
 			mapData_[y][x] = csvData.GetValue(x, y);
 		}
+		for (int y = 0; y < mapHeight_;y++)
+		{
+			mapData_[y][x] = csvData.GetValue(x, y+mapHeight_);
+			Feed* feed = Instantiate<Feed>(this);
+			feed->SetPosition({ -9.0f + x * 2.0f,0.5f,(9.0f - y * 2.0f) + 20.0f });
+			if (mapData_[x][y] == 1)
+			{
+				feed->SetFeedType(FeedType::FEEDTYPE_NORMAL);
+			}
+			if (mapData_[x][y] == 2)
+			{
+				feed->SetFeedType(FeedType::FEEDTYPE_POWER);
+			}
+		}
 	}
 
 
@@ -63,9 +78,9 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	Model::SetTransform(hSilly, transform_);
-	Model::Draw(hSilly);
-	
+	//Model::SetTransform(hSilly, transform_);
+	//Model::Draw(hSilly);
+
 	for (int j = 0;j < 10;j++)
 	{
 		for (int i = 0;i < 10;i++)

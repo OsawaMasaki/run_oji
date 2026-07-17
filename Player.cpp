@@ -55,7 +55,7 @@ namespace
 
 
 Player::Player(GameObject* parent)
-	:GameObject(parent), hWalkModel_(-1), hIdleModel_(-1), hFlipModel_(-1){
+	:GameObject(parent,"Player"), hWalkModel_(-1), hIdleModel_(-1), hFlipModel_(-1) {
 	//swordDirには、初期方向として、ローカルモデルの剣の根っこから
 	//先端までのベクトルとして（0,1,0)を代入しておく
 	//初期位置は原点
@@ -69,15 +69,14 @@ void Player::Initialize()
 	//hSilly = Model::Load("Thriller Part 2.fbx");
 	//Model::SetAnimFrame(hSilly, 0, 1130, 1.0);
 
-	hWalkModel_ = Model::Load("Walking_furafura.fbx");
-	Model::SetAnimFrame(hWalkModel_, 0, 91, 1.0);
+	hWalkModel_ = Model::Load("oji_Run.fbx");
+	Model::SetAnimFrame(hWalkModel_, 0, 50, 1.0);
 
-	hIdleModel_ = Model::Load("Zombie Idle.fbx");
+	hIdleModel_ = Model::Load("oji_Idle.fbx");
 	Model::SetAnimFrame(hIdleModel_, 0, 240, 1.0);
 
-	hFlipModel_ = Model::Load("Backflip.fbx");
-	Model::SetAnimFrame(hFlipModel_, 0, 129, 1.0);
-
+	SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 1.5f);
+	AddCollider(collider);
 	if (ground_ != nullptr)
 	{
 		gmap = ground_->GetMapData();
@@ -86,7 +85,6 @@ void Player::Initialize()
 	{
 		Debug::Log("Ground is not set for Player.");
 	}
-
 }
 
 void Player::Update()
