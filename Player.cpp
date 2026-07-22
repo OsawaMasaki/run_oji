@@ -75,7 +75,7 @@ void Player::Initialize()
 	hIdleModel_ = Model::Load("oji_Idle.fbx");
 	Model::SetAnimFrame(hIdleModel_, 0, 240, 1.0);
 
-	SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 1.5f);
+	SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 0.7f);
 	AddCollider(collider);
 	if (ground_ != nullptr)
 	{

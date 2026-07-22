@@ -27,7 +27,7 @@ public:
 private:
 	std::vector<std::vector<int>> mapData_;
 	int hSilly;
-	int hTree;
+	int hBlock;
 	int mapWidth_;
 	int mapHeight_;
 };

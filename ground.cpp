@@ -27,7 +27,7 @@ namespace
 }
 
 Ground::Ground(GameObject* parent)
-	:GameObject(parent), hSilly(-1), hTree(-1),mapWidth_(-1),mapHeight_(-1)
+	:GameObject(parent), hSilly(-1), hBlock(-1),mapWidth_(-1),mapHeight_(-1)
 {
 	CsvReader csvData;
 	csvData.Load("map.csv");
@@ -40,23 +40,21 @@ Ground::Ground(GameObject* parent)
 		for (int y = 0; y < mapHeight_;y++)
 		{
 			mapData_[y][x] = csvData.GetValue(x, y);
-		}
-		for (int y = 0; y < mapHeight_;y++)
-		{
-			mapData_[y][x] = csvData.GetValue(x, y+mapHeight_);
-			Feed* feed = Instantiate<Feed>(this);
-			feed->SetPosition({ -9.0f + x * 2.0f,0.5f,(9.0f - y * 2.0f) + 20.0f });
-			if (mapData_[x][y] == 1)
+			if (mapData_[y][x] != 1)
 			{
-				feed->SetFeedType(FeedType::FEEDTYPE_NORMAL);
-			}
-			if (mapData_[x][y] == 2)
-			{
-				feed->SetFeedType(FeedType::FEEDTYPE_POWER);
+				Feed* feed = Instantiate<Feed>(this);
+				feed->SetPosition({ -9.0f + x * 2.0f,0,(9.0f - y * 2.0f)});
+				if (mapData_[y][x] == 3)
+				{
+					feed->SetFeedType(FeedType::FEEDTYPE_POWER);
+				}
+				else
+				{
+					feed->SetFeedType(FeedType::FEEDTYPE_NORMAL);
+				}
 			}
 		}
 	}
-
 
 	//mapData_ = mapData;//ファイルグローバルのmapDataをコピーして
 }
@@ -64,11 +62,10 @@ Ground::Ground(GameObject* parent)
 void Ground::Initialize()
 {
 	hSilly = Model::Load("uv2.fbx");
-	Model::SetAnimFrame(hSilly, 0, 59, 1.0);
 
-	//hTree = Model::Load("blook.fbx");
-	hTree = Model::Load("blook2.fbx");
-	//hTree = Model::Load("tree.fbx");
+	//hBlock = Model::Load("blook.fbx");
+	hBlock = Model::Load("blook2.fbx");
+	//hBlock = Model::Load("tree.fbx");
 
 }
 
@@ -78,20 +75,20 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	//Model::SetTransform(hSilly, transform_);
-	//Model::Draw(hSilly);
+	Model::SetTransform(hSilly, transform_);
+	Model::Draw(hSilly);
 
 	for (int j = 0;j < 10;j++)
 	{
 		for (int i = 0;i < 10;i++)
 		{
-			if (mapData_[j][i] != 0) 
+			if (mapData_[j][i] == 1) 
 			{
 				Transform tr;
 				//tr.position_ = { 10.0f - i * 2 - 1,0.0f, 10.0f - j * 2 - 1 };
 				tr.position_ = { -9.0f + i * 2.0f,0.0f,9.0f - j * 2.0f };
-				Model::SetTransform(hTree, tr);
-				Model::Draw(hTree);
+				Model::SetTransform(hBlock, tr);
+				Model::Draw(hBlock);
 			}
 		}
 	}

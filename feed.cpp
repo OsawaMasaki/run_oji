@@ -1,4 +1,5 @@
 #include "feed.h"
+#include "Player.h"
 #include "Engine/Model.h"
 #include "Engine/Debug.h"
 //#include "TestScene.h"
@@ -13,7 +14,6 @@ Feed::Feed(GameObject* parent)
 	//csvData.Load("map.csv");
 	//mapWidth_ = csvData.GetWidth();
 	//mapHeight_ = csvData.GetHeight();
-
 	//feedData_ = std::vector<std::vector<int>>(mapHeight_, std::vector<int>(mapWidth_, 0));
 	//for (int x = 0;x < mapWidth_;x++)
 	//{
@@ -28,7 +28,8 @@ void Feed::Initialize()
 {
 	hModel_ = Model::Load("feed.fbx");//モデルの読み込み
 	//transform_.position_ = { 10.0f,0.7f,10.0f };
-	//transform_.scale_ = { 3.0f,3.0f,3.0f };
+
+	SetFeedType(type_);
 
 	//if (type_ == FeedType::FEEDTYPE_NORMAL)
 	//{
@@ -40,8 +41,6 @@ void Feed::Initialize()
 	//	hModel_ = Model::Load("powerfeed.fbx");
 	//	score_ = 5;
 	//}
-	SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 1.5f);
-	AddCollider(collider);
 }
 
 void Feed::Update()
@@ -92,11 +91,19 @@ void Feed::SetFeedType(FeedType type)
 	type_ = type;
 	if (type_ == FeedType::FEEDTYPE_NORMAL)
 	{
+		SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 0.3f);
+		AddCollider(collider);
+
 		hModel_ = Model::Load("feed.fbx");
+		transform_.scale_ = { 2.0f,2.0f,2.0f };
 		score_ = 1;
 	}
 	else if (type_ == FeedType::FEEDTYPE_POWER)
 	{
+		SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), 1.0f);
+		AddCollider(collider);
+
+		transform_.scale_ = { 1.0f,1.0f,1.0f };
 		hModel_ = Model::Load("powerfeed.fbx");
 		score_ = 5;
 	}
@@ -104,4 +111,8 @@ void Feed::SetFeedType(FeedType type)
 
 void Feed::OnCollision(GameObject* pTarget)
 {
+	if (pTarget->GetObjectName() == "Player")
+	{
+		KillMe();
+	}
 }
