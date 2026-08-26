@@ -6,6 +6,7 @@
 #include "Engine/Camera.h"
 #include "Engine/SceneManager.h"
 #include "Engine/Input.h"
+#include "Engine/Text.h"
 
 namespace {
 	int myScore = 10;
@@ -36,6 +37,9 @@ void PlayScene::Initialize()
 
 
 	Camera::SetPosition(XMFLOAT3(0.0f, 20.0f, -30.0f));
+
+	pText_ = new Text;
+	pText_->Initialize();
 }
 
 //更新
@@ -60,16 +64,14 @@ void PlayScene::Update()
 //描画
 void PlayScene::Draw()
 {
-	//std::string scrText;
-	//std::string remText;
-	//scrText = "SCORE:" + std::to_string(myScore);
-	//pText_ -> Draw(20, 20, scrText.c_str());
-	//remText = "REMAINING" + std::to_string(myRemaining);
-	//rText_->Draw(20, 50, remText.c_str());
+	std::string scrText;
+	scrText = "SCORE:" + std::to_string(myScore);
+	pText_->Draw(30, 30, scrText.c_str());
 
 }
 
 //開放
 void PlayScene::Release()
 {
+	pText_->Release();//テキストの解放
 }
