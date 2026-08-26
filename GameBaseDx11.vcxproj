@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
@@ -168,9 +169,11 @@
     <ClCompile Include="feed.cpp" />
     <ClCompile Include="ground.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
@@ -199,6 +202,7 @@
     <ClInclude Include="feed.h" />
     <ClInclude Include="ground.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayScene.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
