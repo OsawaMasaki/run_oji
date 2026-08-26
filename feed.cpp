@@ -8,7 +8,7 @@
 
 
 Feed::Feed(GameObject* parent)
-	:GameObject(parent), type_(FEEDTYPE_NORMAL), hModel_(-1),score_(0)
+	:GameObject(parent,"feed"), type_(FEEDTYPE_NORMAL), hModel_(-1), score_(0)
 {
 	//CsvReader csvData;
 	//csvData.Load("map.csv");

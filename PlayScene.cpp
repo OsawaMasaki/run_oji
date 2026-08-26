@@ -41,6 +41,13 @@ void PlayScene::Initialize()
 //更新
 void PlayScene::Update()
 {
+	if (FindObject("feed") == nullptr)
+	{
+		SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
+		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+
+	}
+
 	if (Input::IsKeyDown(DIK_C))
 	{
 		//シーンマネージャーを探して、シーン切り替えの関数を呼ぶ
