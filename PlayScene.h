@@ -23,7 +23,8 @@ public:
 
 	//開放
 	void Release() override;
+	void AddScore(int score) { myScore += score; }
 private:
 	Text* pText_;
-
+	int myScore;
 };

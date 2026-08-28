@@ -5,6 +5,8 @@
 //#include "TestScene.h"
 #include "Engine/Input.h"
 #include "Engine/CsvReader.h"
+#include "PlayScene.h"
+
 
 
 Feed::Feed(GameObject* parent)
@@ -111,6 +113,9 @@ void Feed::SetFeedType(FeedType type)
 
 void Feed::OnCollision(GameObject* pTarget)
 {
+	PlayScene* playScene = dynamic_cast<PlayScene*>(GetParent()->GetParent());
+	playScene->AddScore(score_);
+
 	if (pTarget->GetObjectName() == "Player")
 	{
 		KillMe();

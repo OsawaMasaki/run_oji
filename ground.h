@@ -23,12 +23,15 @@ public:
 
 	//開放
 	void Release() override;
-
+	void GetEsaCount(int count) { esaCount_ = count; }
 private:
 	std::vector<std::vector<int>> mapData_;
 	int hSilly;
 	int hBlock;
 	int mapWidth_;
 	int mapHeight_;
+	int esaCount_;
+	int normalEsaCount_;
+	int powerEsaCount_;
 };
 

@@ -43,6 +43,7 @@ Ground::Ground(GameObject* parent)
 			if (mapData_[y][x] != 1)
 			{
 				Feed* feed = Instantiate<Feed>(this);
+				//esaCount_
 				feed->SetPosition({ -9.0f + x * 2.0f,0,(9.0f - y * 2.0f)});
 				if (mapData_[y][x] == 3)
 				{

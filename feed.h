@@ -31,7 +31,7 @@ public:
 
 	void SetFeedType(FeedType type);
 	void OnCollision(GameObject* pTarget) override;
-
+	int GetScore() { return score_; }
 private:
 	std::vector<std::vector<int>> feedData_;
 	FeedType type_;//餌のモデル

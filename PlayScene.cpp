@@ -8,14 +8,10 @@
 #include "Engine/Input.h"
 #include "Engine/Text.h"
 
-namespace {
-	int myScore = 10;
-
-}
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject* parent)
-	: GameObject(parent, "PlayScene")
+	: GameObject(parent, "PlayScene"),myScore(0)
 {
 }
 
@@ -36,8 +32,8 @@ void PlayScene::Initialize()
 	Camera::SetPosition(XMFLOAT3(0.0f, 20.0f, -30.0f));
 
 
-	//pText_ = new Text;
-	//pText_->Initialize();
+	pText_ = new Text;
+	pText_->Initialize();
 }
 
 //更新
@@ -54,14 +50,16 @@ void PlayScene::Update()
 //描画
 void PlayScene::Draw()
 {
-	//std::string scrText;
-	//scrText = "SCORE:" + std::to_string(myScore);
-	//pText_->Draw(30, 30, scrText.c_str());
+	std::string scrText;
+	char buffer[256];
+	sprintf(buffer, "%010d", myScore);
+	scrText = "SCORE:" + std::string(buffer);
+	pText_->Draw(30, 30, scrText.c_str());
 
 }
 
 //開放
 void PlayScene::Release()
 {
-	//pText_->Release();//テキストの解放
+	pText_->Release();//テキストの解放
 }
