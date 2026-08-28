@@ -30,6 +30,7 @@ void TestScene::Update()
 
 		SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
 		pSceneManager->ChangeScene(SCENE_ID_PLAY);
+		//pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 	}
 }
 

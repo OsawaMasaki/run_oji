@@ -32,46 +32,37 @@ void PlayScene::Initialize()
 
 	pPlayer->SetGround(pGround);
 
-	//pText_ = new Text;
-	//pText_ -> Initialize();
-
-
 	Camera::SetPosition(XMFLOAT3(0.0f, 20.0f, -30.0f));
 
-	pText_ = new Text;
-	pText_->Initialize();
+
+	//pText_ = new Text;
+	//pText_->Initialize();
 }
 
 //更新
 void PlayScene::Update()
 {
-	if (FindObject("feed") == nullptr)
+	if (FindObject("feed") == nullptr || Input::IsKeyDown(DIK_C))
 	{
 		SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
 		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+		//pSceneManager->ChangeScene(SCENE_ID_TEST);
 
 	}
 
-	if (Input::IsKeyDown(DIK_C))
-	{
-		//シーンマネージャーを探して、シーン切り替えの関数を呼ぶ
-		// 見つからない場合はnullptrが返るので、nullptrでないことを確認してから呼ぶ
-		SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
-		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-	}
 }
 
 //描画
 void PlayScene::Draw()
 {
-	std::string scrText;
-	scrText = "SCORE:" + std::to_string(myScore);
-	pText_->Draw(30, 30, scrText.c_str());
+	//std::string scrText;
+	//scrText = "SCORE:" + std::to_string(myScore);
+	//pText_->Draw(30, 30, scrText.c_str());
 
 }
 
 //開放
 void PlayScene::Release()
 {
-	pText_->Release();//テキストの解放
+	//pText_->Release();//テキストの解放
 }
