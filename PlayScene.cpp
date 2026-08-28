@@ -10,6 +10,7 @@
 
 namespace {
 	int myScore = 10;
+
 }
 
 //コンストラクタ
@@ -24,8 +25,8 @@ void PlayScene::Initialize()
 	//pWp = Instantiate<Weapon>(this);
 	//Instantiate <Player>(this);
 	//Instantiate <Ground>(this);
-	Instantiate <Enemy>(this);
-	Instantiate <Feed>(this);
+	//Instantiate <Enemy>(this);
+	//Instantiate <Feed>(this);
 
 	Player* pPlayer = Instantiate<Player>(this);
 	Ground* pGround = Instantiate<Ground>(this);
@@ -46,8 +47,6 @@ void PlayScene::Update()
 	{
 		SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
 		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-		//pSceneManager->ChangeScene(SCENE_ID_TEST);
-
 	}
 
 }

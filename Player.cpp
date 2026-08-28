@@ -63,12 +63,6 @@ Player::Player(GameObject* parent)
 
 void Player::Initialize()
 {
-	//hSilly = Model::Load("Walking_z.fbx");
-	//Model::SetAnimFrame(hSilly, 0, 158, 1.0);
-
-	//hSilly = Model::Load("Thriller Part 2.fbx");
-	//Model::SetAnimFrame(hSilly, 0, 1130, 1.0);
-
 	hWalkModel_ = Model::Load("oji_Run.fbx");
 	Model::SetAnimFrame(hWalkModel_, 0, 50, 1.0);
 
