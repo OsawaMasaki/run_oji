@@ -50,16 +50,15 @@ void PlayScene::Update()
 //描画
 void PlayScene::Draw()
 {
-	std::string scrText;
-	char buffer[256];
-	sprintf(buffer, "%010d", myScore);
-	scrText = "SCORE:" + std::string(buffer);
-	pText_->Draw(30, 30, scrText.c_str());
+	//std::string scrText;
+	char buffer[60];
+	sprintf_s(buffer,sizeof(buffer), "SCORE:%d", myScore);
+	pText_->Draw(30, 30, buffer);
 
 }
 
 //開放
 void PlayScene::Release()
 {
-	pText_->Release();//テキストの解放
+	//pText_->Release();//テキストの解放
 }
